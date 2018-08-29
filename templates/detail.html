@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="posts">
+        <section class="post">
+            <header class="post-header">
+                <h2 class="post-title">{{ post.title }}</h2>
+                <br/>
+
+                <p class="post-meta">
+                    Time: <a class="post-author" href="#">{{ post.date_time }}</a>
+                    <a class="post-category" style='background-color: dodgerblue' href="#">
+                        {% for tag in post.tag_name.all %}
+                            {{ tag }} &nbsp
+                        {% endfor %}
+                    </a>
+                </p>
+            </header>
+
+            <div class="post-description">
+                <p>
+                    {{ post.content }}
+                </p>
+            </div>
+        </section>
+
+    </div>
+    <div class="content-wrap-comment">
+        <div id="comment"></div>
+        <form action="." method="post">
+            {{ comment_form.as_p }}
+            {% csrf_token %}
+            <p><input type="submit" value="发表评论"></p>
+        </form>
+
+        <div class="#">
+            <ul class="comment-list">
+                {% for comment in all_comment %}
+                    <li class="comment-item">
+                        <hr class="the-line"/>
+                        <span class="nickname">{{ comment.username }} - </span>
+                        <time class="submit-date"
+                              datetime="{{ comment.create_time }}">{{ comment.create_time|date:"Y/m/d   h:m" }}</time>
+
+                        <div style="word-wrap: break-word">
+                            {{ comment.content }}
+                        </div>
+
+                    </li>
+                {% empty %}
+                    暂无评论
+                {% endfor %}
+
+            </ul>
+        </div>
+
+    </div>
+{% endblock %}

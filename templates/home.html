@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <div>
+        <ul class="nav-list">
+        <li class="nav-tag">
+            <a class="pure-button" href='.'>标签</a>
+        </li>
+
+            {% for tag in tag_list %}
+
+                <li class="nav-tag">
+                    <a class="pure-button" href="{% url "search_tag" tag=tag %}">{{ tag }}</a>
+                </li>
+            {% endfor %}
+
+        </ul>
+    </div>
+    <div class="posts">
+        {% for contact in contacts %}
+            <section class="post">
+                <header class="post-header">
+                    <h2 class="post-title">{{ contact.title }}</h2>
+
+                    <p class="post-meta">
+                        Time: <a class="post-author" href="#">{{ contact.date_time }}</a>
+                        <a class="post-category"  href="#">
+                            {% for tag in contact.tag_name.all %}
+                                {{ tag }} &nbsp
+                            {% endfor %}
+                        </a>
+                    </p>
+                </header>
+
+                <div class="post-description"
+                     style="width:800px;
+                            overflow:hidden;
+                            white-space:nowrap;
+                            text-overflow:ellipsis;
+                            -webkit-text-overflow:ellipsis;">
+                    <p>
+                        {{ contact.content }}
+                    </p>
+                    <a class="pure-button" href="{% url "detail" id=contact.id %}">link >>> </a>
+                </div>
+            </section>
+        {% endfor %}
+    </div>
+    <div class="pagination" id="page">
+    <span class="step-links">
+        {% if contacts.has_previous %}
+            <a href="?page=1">&laquo; 首页</a>
+            <a href="?page={{ contacts.previous_page_number }}">上一页</a>
+        {% endif %}
+        {% if contacts.has_next %}
+            <a href="?page={{ contacts.next_page_number }}">下一页</a>
+            <a href="?page={{ contacts.paginator.num_pages }}">末页 &raquo;</a>
+        {% endif %}
+    </span>
+    </div>
+{% endblock %}
